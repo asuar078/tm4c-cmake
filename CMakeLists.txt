@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.2)
-project(linux_blinky)
+project(tm4c_cmake)
 
 # Some arbitrary hand-maintained version
 set(PROJECT_MAJOR_VERSION 1)
@@ -24,20 +24,21 @@ include(toolchain/tm4c129.cmake)
 #Tivaware files
 set(TIVAWARE_PATH "/home/bigbywolf/Applications/tivaware")
 include_directories(${TIVAWARE_PATH})
-#include_directories(/home/bigbywolf/Applications/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include)
 
 include_directories(includes/)
 include_directories(third-party/FreeRTOS/include)
 include_directories(third-party/FreeRTOS/portable/GCC/ARM_CM4F)
 
 add_subdirectory(third-party/FreeRTOS)
+add_subdirectory(src/tiva-utils)
+add_subdirectory(src/peripheral)
 
 #Source files
 file(GLOB SOURCES "src/*.c" "src/*.cpp")
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
-    ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a freertos
+    ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a freertos tiva_utils smbus
 )
 
 # define objcopy macro
