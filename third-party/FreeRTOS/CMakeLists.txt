@@ -17,4 +17,4 @@ set(SRCS
         )
 
 
-ADD_LIBRARY(freertos ${SRCS})
+ADD_LIBRARY(freertos STATIC ${SRCS})

@@ -150,5 +150,5 @@ dkms.conf
 #tiva.specs
 #tm4c123g.cmake
 #tm4c123g.ld
-#tm4c129.cmake
-#tm4c1294ncpdt.ld
+#tm4c.cmake
+#tm4c1294ncpdt.lds

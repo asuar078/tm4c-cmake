@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.2)
-project(tm4c_cmake)
+project(tm4c_cmake CXX C ASM)
 
 # Some arbitrary hand-maintained version
 set(PROJECT_MAJOR_VERSION 1)
@@ -19,27 +19,42 @@ if(${CMAKE_BUILD_TYPE} MATCHES TESTING)
 endif()
 
 #Toolchain file
-include(toolchain/tm4c129.cmake)
+include(toolchain/tm4c.cmake)
 
 #Tivaware files
 set(TIVAWARE_PATH "/home/bigbywolf/Applications/tivaware")
 include_directories(${TIVAWARE_PATH})
 
-include_directories(includes/)
+include_directories(includes)
 include_directories(third-party/FreeRTOS/include)
 include_directories(third-party/FreeRTOS/portable/GCC/ARM_CM4F)
+include_directories(third-party/freertos-addons/c++/Source/include)
 
 add_subdirectory(third-party/FreeRTOS)
+add_subdirectory(third-party/freertos-addons)
+
+add_subdirectory(src/cpp-utils)
 add_subdirectory(src/tiva-utils)
 add_subdirectory(src/peripheral)
+add_subdirectory(src/task)
+
+message(STATUS "tiva path ${TIVAWARE_PATH}" )
 
 #Source files
-file(GLOB SOURCES "src/*.c" "src/*.cpp")
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
+#file(GLOB SOURCES "src/*.c" "src/*.cpp")
+#add_executable(${CMAKE_PROJECT_NAME} src/main.cpp src/startup/${MCU}_startup_ccs_gcc.c src/task/LedTask.cpp src/task/LedTask.h)
+add_executable(${CMAKE_PROJECT_NAME} src/main.cpp src/startup/${MCU}_startup_ccs_gcc.c)
+
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
-    ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a freertos tiva_utils smbus
+    ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a ${TIVAWARE_PATH}/usblib/gcc/libusb.a
+        freertos freertos_addons cpp_utils peripheral task
 )
+
+# Add dependency to the program of linker script during linking stage
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+        LINK_DEPENDS ${PROJECT_SOURCE_DIR}/ldscripts/${MCU}.lds
+        )
 
 # define objcopy macro
 macro(OBJCOPY_FILE EXE_NAME)

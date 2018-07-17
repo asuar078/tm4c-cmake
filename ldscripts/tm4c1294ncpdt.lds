@@ -104,3 +104,5 @@ SECTIONS {
         KEEP(*(.stack))
     } > REGION_STACK
 }
+
+ENTRY(ResetISR)

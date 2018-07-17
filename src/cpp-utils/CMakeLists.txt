@@ -1,13 +1,12 @@
-set(LIB_NAME peripheral)
+set(LIB_NAME cpp_utils)
 
-file(GLOB SOURCES "gpio/*.cpp" "gpio/*.h"
-        "smbus/*.cpp" "smbus/*.h"      )
+file(GLOB SOURCES "*.cpp" "*.c" "*.h")
 
 add_library(${LIB_NAME} STATIC ${SOURCES})
-#ADD_DEPENDENCIES(${LIB_NAME}  freertos gpio cpp_utils)
 
 target_link_libraries(${LIB_NAME}
         ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a ${TIVAWARE_PATH}/usblib/gcc/libusb.a
+        freertos peripheral
         )
 
 # Add dependency to the program of linker script during linking stage
