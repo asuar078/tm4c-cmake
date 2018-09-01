@@ -1,12 +1,12 @@
-set(LIB_NAME cpp_utils)
+set(LIB_NAME bus_manager)
 
-file(GLOB SOURCES "*.cpp" "*.c" "*.h")
+file(GLOB SOURCES "smbus/*.cpp" "smbus/*.h" "pwm/*.cpp" "pwm/*.h")
 
-add_library(${LIB_NAME} STATIC ${SOURCES})
+add_library(${LIB_NAME} ${SOURCES})
 
 target_link_libraries(${LIB_NAME}
         ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a ${TIVAWARE_PATH}/usblib/gcc/libusb.a
-        freertos peripheral
+        tiva_utils
         )
 
 # Add dependency to the program of linker script during linking stage

@@ -26,17 +26,18 @@ set(TIVAWARE_PATH "/home/bigbywolf/Applications/tivaware")
 include_directories(${TIVAWARE_PATH})
 
 include_directories(includes)
+#include_directories(third-party/FreeRTOScpp)
 include_directories(third-party/FreeRTOS/include)
 include_directories(third-party/FreeRTOS/portable/GCC/ARM_CM4F)
-include_directories(third-party/freertos-addons/c++/Source/include)
+#include_directories(third-party/freertos-addons/c++/Source/include)
 
 add_subdirectory(third-party/FreeRTOS)
-add_subdirectory(third-party/freertos-addons)
 
-add_subdirectory(src/cpp-utils)
-add_subdirectory(src/tiva-utils)
+add_subdirectory(src/utils)
 add_subdirectory(src/peripheral)
 add_subdirectory(src/task)
+add_subdirectory(src/bus_manager)
+add_subdirectory(src/drivers)
 
 message(STATUS "tiva path ${TIVAWARE_PATH}" )
 
@@ -48,7 +49,7 @@ add_executable(${CMAKE_PROJECT_NAME} src/main.cpp src/startup/${MCU}_startup_ccs
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
     ${TIVAWARE_PATH}/driverlib/gcc/libdriver.a ${TIVAWARE_PATH}/usblib/gcc/libusb.a
-        freertos freertos_addons cpp_utils peripheral task
+        freertos peripheral task bus_manager tiva_driver
 )
 
 # Add dependency to the program of linker script during linking stage

@@ -37,7 +37,7 @@
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/udma.h"
-#include "tiva_smbus.h"
+#include "smbus.h"
 
 //*****************************************************************************
 //
@@ -5167,7 +5167,7 @@ SMBusSlaveInit(tSMBus *psSMBus, uint32_t ui32I2CBase)
 
     //
     // Enable the I2C slave module.  The slave is always enabled because the
-    // SMBus spec requires that all devices respond whne their slave address
+    // SMBus spec requires that all devices respond when their slave address
     // is put on the bus.
     //
     I2CSlaveEnable(psSMBus->ui32I2CBase);

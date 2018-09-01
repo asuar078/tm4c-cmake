@@ -1,20 +1,25 @@
-//
-// Created by bigbywolf on 7/16/18.
-//
+/*
+ * LedTask.h
+ *
+ *  Created on: Jul 19, 2018
+ *      Author: bigbywolf
+ */
 
-#ifndef TM4C_CMAKE_LEDTASK_H
-#define TM4C_CMAKE_LEDTASK_H
+#ifndef TASK_LEDTASK_H_
+#define TASK_LEDTASK_H_
 
+#include "freertos_cpp/Task.h"
 
-#include <cstdint>
-#include <thread.hpp>
+namespace task  {
 
-class LedTask : public cpp_freertos::Thread{
-public:
+    class LedTask : public freertos::Task{
+    public:
+        LedTask(char *taskName, uint16_t stackSize = 1024, uint8_t priority = 5);
+        void start(void *taskData) override;
+        void run(void) override;
 
-    LedTask(uint16_t StackDepth, UBaseType_t Priority) ;
-    void Run() override ;
-};
+    };
 
+} /* namespace task */
 
-#endif //TM4C_CMAKE_LEDTASK_H
+#endif /* TASK_LEDTASK_H_ */

@@ -8,13 +8,13 @@ set(SRCS
         croutine.c
         event_groups.c
         list.c
-        queue.c
+        Queue.c
         tasks.c
         timers.c
         portable/GCC/ARM_CM4F/port.c
         # include the specified heap allocator
-        portable/MemMang/heap_4.c
+        portable/MemMang/heap_2.c
         )
 
 
-ADD_LIBRARY(freertos STATIC ${SRCS})
+ADD_LIBRARY(freertos ${SRCS})

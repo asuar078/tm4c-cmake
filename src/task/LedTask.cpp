@@ -1,51 +1,72 @@
-//
-// Created by bigbywolf on 7/16/18.
-//
 
 #include "LedTask.h"
 
-#include <FreeRTOSConfig.h>
-#include <FreeRTOS.h>
-#include <task.h>
-#include <portmacro.h>
-#include <projdefs.h>
-#include <cstddef>
-#include "../peripheral/gpio/GPIO.h"
+#include <cstdint>
+#include "priorities.h"
+#include "utils/uartstdio.h"
+#include "../drivers/rgb.h"
 
-void LedTask::Run() {
+#define LED_TOGGLE_DELAY        250
 
-    volatile uint32_t ui32Loop;
+namespace task {
 
-    GPIO<SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_2> led0;
-    GPIO<SYSCTL_PERIPH_GPIOF, GPIO_PORTF_BASE, GPIO_PIN_1> led1;
-//
-    led0.output();
-    led1.output();
+// [G, R, B] range is 0 to 0xFFFF per color.
+    static uint32_t g_pui32Colors[3] = {0x0000, 0x0000, 0x0000};
+    static uint8_t g_ui8ColorsIndx;
 
-    while(1){
 
-        // Turn on the LED.
-        led0.pinWrite(true);
-        led1.pinWrite(false);
+    LedTask::LedTask(char *taskName, uint16_t stackSize, uint8_t priority) : Task(taskName, stackSize, priority) {
 
-        // Delay for a bit.
-        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
-        {
-        }
+    }
 
-        // Turn off the LED.
-        led0.pinWrite(false);
-        led1.pinWrite(true);
+    void LedTask::start(void *taskData){
+        m_taskData = taskData;
+        ::xTaskCreate(reinterpret_cast<void(*)(void*)>(BOUNCE(LedTask, run)),
+                      m_taskName, m_stackSize, reinterpret_cast<void*>(this), m_priority, &m_handle);
+    }
 
-        // Delay for a bit.
-        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
-        {
+    void LedTask::run(void ){
+
+        // Initialize the GPIOs and Timers that drive the three LEDs.
+        RGBInit(1);
+        RGBIntensitySet(0.3f);
+
+        // Turn on the Green LED
+        g_ui8ColorsIndx = 0;
+        g_pui32Colors[g_ui8ColorsIndx] = 0x8000;
+        RGBColorSet(g_pui32Colors);
+
+        // Print the current loggling LED and frequency.
+        UARTprintf("\nLed %d is blinking. [R, G, B]\n", g_ui8ColorsIndx);
+        UARTprintf("Led blinking frequency is %d ms.\n", (LED_TOGGLE_DELAY * 2));
+
+        portTickType ui32WakeTime;
+        uint32_t ui32LEDToggleDelay;
+        uint8_t i8Message;
+
+        // Initialize the LED Toggle Delay to default value.
+        ui32LEDToggleDelay = LED_TOGGLE_DELAY;
+
+        // Get the current tick count.
+        ui32WakeTime = xTaskGetTickCount();
+
+        while(1){
+
+            // Turn on the LED.
+            RGBEnable();
+
+            // Wait for the required amount of time.
+            vTaskDelayUntil(&ui32WakeTime, ui32LEDToggleDelay / portTICK_RATE_MS);
+
+            // Turn off the LED.
+            RGBDisable();
+
+            // Wait for the required amount of time.
+            vTaskDelayUntil(&ui32WakeTime, ui32LEDToggleDelay / portTICK_RATE_MS);
         }
 
     }
 
+
 }
-
-LedTask::LedTask(uint16_t StackDepth, UBaseType_t Priority) : Thread(StackDepth, Priority) {}
-
 
