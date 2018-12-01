@@ -55,11 +55,11 @@ set(FPU "-mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb")
 
 set(CMAKE_ASM_FLAGS "${CPU} ${FPU} -MD")
 
-set(CMAKE_C_FLAGS "${CPU} ${FPU} -std=gnu99 -O2 -Og -ffunction-sections -fdata-sections -MD -Wall -Wextra -pedantic")
+set(CMAKE_C_FLAGS "${CPU} ${FPU} -std=gnu99 -O2 -g -ffunction-sections -fdata-sections -MD -Wall -Wextra -pedantic")
 
-set(CMAKE_CXX_FLAGS "${CPU} ${FPU} -O2 -Og -s -ffunction-sections -fdata-sections -MD -Wall -Wextra -pedantic -std=c++14 \
+set(CMAKE_CXX_FLAGS "${CPU} ${FPU} -O2 -g -ffunction-sections -fdata-sections -MD -Wall -Wextra -pedantic -std=c++14 \
     -fno-exceptions -fno-non-call-exceptions -fno-rtti -fno-unwind-tables -fno-common -finline-small-functions \
-    -findirect-inlining -fno-threadsafe-statics -fno-asynchronous-unwind-tables -finline-limit=150 \
+    -findirect-inlining -fno-threadsafe-statics -fno-asynchronous-unwind-tables -finline-limit=150  \
     -Wstrict-aliasing -pedantic -fmax-errors=5 -Werror -Wunreachable-code -Wcast-align -Wcast-qual \
     -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-include-dirs \
     -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-promo -Wstrict-null-sentinel \
@@ -67,13 +67,14 @@ set(CMAKE_CXX_FLAGS "${CPU} ${FPU} -O2 -Og -s -ffunction-sections -fdata-section
     -fdiagnostics-show-option")
 
 # can't use -Wold-style-cast because of freertos liberal use of them
+# -Weffc++  not very useful
 
 
 # set linker flags
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
-set(CMAKE_EXE_LINKER_FLAGS "-Wl,-gc-sections -flto --entry ResetISR \
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-gc-sections -g -flto --entry ResetISR \
     -Wl,-Map=${MCU}.map \
     -Wl,-T${PROJECT_SOURCE_DIR}/ldscripts/${MCU}.lds -specs=${PROJECT_SOURCE_DIR}/ldscripts/tiva.specs \
      -specs=nosys.specs ")
@@ -89,9 +90,9 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 # where is the target environment
-SET(CMAKE_FIND_ROOT_PATH
-        /home/bigbywolf/Applications/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi
-        )
+#SET(CMAKE_FIND_ROOT_PATH
+#        /home/bigbywolf/Applications/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi
+#        )
 
 # cache the flags for use
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "CFLAGS")

@@ -10,15 +10,15 @@
 
 #include "freertos_cpp/Task.h"
 
-namespace task  {
-
-    class LedTask : public freertos::Task{
-    public:
-        LedTask(char *taskName, uint16_t stackSize = 1024, uint8_t priority = 5);
-        void start(void *taskData) override;
-        void run(void) override;
-
-    };
+namespace task
+{
+class LedTask : public freertos::Task
+{
+  public:
+    LedTask(char *taskName, uint16_t stackSize = 1024, uint8_t priority = 5);
+    void start(void *taskData);
+    void run(void);
+};
 
 } /* namespace task */
 

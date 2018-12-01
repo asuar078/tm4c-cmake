@@ -48,15 +48,15 @@ namespace freertos {
  * @param [in] taskData Data to be passed into the task.
  * @return N/A.
  */
-	void Task::start(void *taskData) {
-//	if (m_handle != nullptr) {
-//		ESP_LOGW(tag, "Task::start - There might be a task already running!");
-//	}
-		m_taskData = taskData;
-        ::xTaskCreate(reinterpret_cast<void(*)(void*)>(BOUNCE(Task, run)),
-                      m_taskName, m_stackSize, reinterpret_cast<void*>(this), m_priority, &m_handle);
-
-	} // start
+//	void Task::start(void *taskData) {
+////	if (m_handle != nullptr) {
+////		ESP_LOGW(tag, "Task::start - There might be a task already running!");
+////	}
+//		m_taskData = taskData;
+//        ::xTaskCreate(reinterpret_cast<void(*)(void*)>(BOUNCE(Task, run)),
+//                      m_taskName, m_stackSize, reinterpret_cast<void*>(this), m_priority, &m_handle);
+//
+//	} // start
 
 
 /**
@@ -121,12 +121,12 @@ namespace freertos {
         return m_taskName;
     }
 
-    void Task::run(void) {
-        while(1){
-
-        }
-
-    }
+//    void Task::run(void) {
+//        while(1){
+//
+//        }
+//
+//    }
 
 
 

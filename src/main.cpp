@@ -10,8 +10,6 @@
 
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
 
 #include "peripheral/smbus/SMBus.h"
 #include "peripheral/gpio/GPIO.h"
@@ -54,24 +52,28 @@ void ConfigureUART(void)
     UARTStdioConfig(0, 115200, 16000000);
 }
 
+task::LedTask led(nullptr);
 
-int main(void) {
+int main(void)
+{
 
-//    // Set the clocking to run at 50 MHz from the PLL.
-    ROM_SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
-                       SYSCTL_OSC_MAIN);
-//
-//    // Initialize the UART and configure it for 115,200, 8-N-1 operation.
+    // Set the clocking to run at 50 MHz from the PLL.
+    SysCtlClockSet(SYSCTL_SYSDIV_4 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ |
+                   SYSCTL_OSC_MAIN);
+
+    // Initialize the UART and configure it for 115,200, 8-N-1 operation.
     ConfigureUART();
-//
-//    // Print demo introduction.
+
+    // Print demo introduction.
     UARTprintf("\n\nWelcome to the EK-TM4C123GXL FreeRTOS Demo!\n");
 
-    task::LedTask led(nullptr);
     led.start(nullptr);
+
+     led.run();
 
     vTaskStartScheduler();
 
-    while (1) {
+    while (1)
+    {
     }
 }

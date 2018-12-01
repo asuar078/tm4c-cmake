@@ -50,8 +50,8 @@ namespace freertos {
                 }
              } // start
          */
-        virtual void start(void *taskData);
-        virtual void run(void);
+//        virtual void start(void *taskData);
+//        virtual void run(void);
 
         void stop();
         void delay(int ms);

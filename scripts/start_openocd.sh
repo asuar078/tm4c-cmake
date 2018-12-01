@@ -1,0 +1,1 @@
+openocd --file /usr/local/share/openocd/scripts/board/ek-tm4c123gxl.cfg
